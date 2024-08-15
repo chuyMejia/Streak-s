@@ -1,0 +1,3 @@
+streaks:
+    path: /streaks
+    controller: App\Controller\StreakController::index
