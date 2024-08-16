@@ -65,13 +65,13 @@ class StreakController extends AbstractController
                 $categories_repo = $this->getDoctrine()->getRepository(Category::class);
                 $cats  = $categories_repo->findAll();
 
-                foreach($cats as $cat){
+               /* foreach($cats as $cat){
                     echo "<strong>".$cat->getTitle()."</strong></br>";
                     foreach($cat->getStreaks() as $data){
                         echo $data->getTitle()."</br>";
 
                     }
-                }
+                }*/
 
 
 
@@ -80,7 +80,9 @@ class StreakController extends AbstractController
             
 
 
+                    // echo 'login correct';
 
+                    // die();
 
 
 
@@ -111,4 +113,16 @@ class StreakController extends AbstractController
         ]);
 
     }
+
+
+    public function myStreaks(UserInterface $user){
+        $tasks =  $user->getTasks();
+        //var_dump($tasks);
+ 
+        //die();
+        return $this->render('task/my-tasks.html.twig',[
+         'tasks' =>  $tasks
+        ]);
+ 
+     }
 }
