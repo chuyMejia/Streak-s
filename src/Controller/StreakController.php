@@ -61,7 +61,7 @@ class StreakController extends AbstractController
                     echo $racha->getCategory()->getTitle().'</br>';
                 }*/
 
-                ///magia 
+                ///SACA LAS RACHAS POR CATEGORIA
                 $categories_repo = $this->getDoctrine()->getRepository(Category::class);
                 $cats  = $categories_repo->findAll();
 
@@ -88,6 +88,27 @@ class StreakController extends AbstractController
 
         return $this->render('streak/index.html.twig', [
             'controller_name' => 'StreakController',
+            'categorias' => $cats
         ]);
+    }
+
+
+
+    public function AllStreaks(){
+
+
+        $em = $this->getDoctrine()->getManager();
+        $streak_repo = $this->getDoctrine()->getRepository(Streak::class);
+        $streaks = $streak_repo->findAll();
+
+
+
+
+
+        return $this->render('streak/index.html.twig', [
+            'controller_name' => 'StreakController',
+            'streaks' => $streaks
+        ]);
+
     }
 }

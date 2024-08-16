@@ -1,3 +1,16 @@
+index:
+    path: /
+    controller: App\Controller\StreakController::index
+
+streaks_categories:
+    path: /streaks-cats
+    controller: App\Controller\StreakController::index
+
+
+registro:
+    path: /registro
+    controller: App\Controller\UserController::register
+
 streaks:
     path: /streaks
-    controller: App\Controller\StreakController::index
+    controller: App\Controller\StreakController::AllStreaks

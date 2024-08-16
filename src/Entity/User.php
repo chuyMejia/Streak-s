@@ -5,6 +5,8 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * User
@@ -12,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="users")
  * @ORM\Entity
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -31,23 +33,25 @@ class User
     private $role;
 
     /**
-     * @var string|null
-     *
-     * @ORM\Column(name="name", type="string", length=100, nullable=true)
+     * @ORM\Column(type="string", length=100, nullable=true)
+     * @Assert\NotBlank
+     * @Assert\Regex("/[a-zA-Z ]+/")
      */
     private $name;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="surname", type="string", length=200, nullable=true)
+   /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     * @Assert\NotBlank
+     * @Assert\Regex("/[a-zA-Z ]+/")
      */
     private $surname;
 
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\NotBlank
+     * @Assert\Email(
+     *      message = "email not valid '{{ value }}'"
+     * )
      */
     private $email;
 
@@ -181,6 +185,28 @@ class User
         return $this->streaks;
 
     }
+ // Métodos de la interfaz UserInterface
 
+ public function getUsername(): string
+ {
+     return $this->email; // Puedes devolver el email o cualquier otro campo único
+ }
+
+ public function getRoles(): array
+ {
+     // Asegúrate de que roles sean devueltos como un array
+     return [$this->role ?? 'ROLE_USER'];
+ }
+
+ public function getSalt()
+ {
+     // No es necesario para bcrypt
+     return null;
+ }
+
+ public function eraseCredentials()
+ {
+     // Si almacenas datos sensibles, límpialos aquí
+ }
 
 }
