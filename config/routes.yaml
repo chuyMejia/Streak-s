@@ -1,6 +1,6 @@
 index:
     path: /
-    controller: App\Controller\StreakController::index
+    controller: App\Controller\StreakController::myStreaks
 
 streaks_categories:
     path: /streaks-cats
@@ -20,3 +20,13 @@ login:
 
 logout:
     path: /logout
+
+
+streak_creation:
+  path: /new-streaks
+  controller: App\Controller\StreakController::creation
+
+
+streak_detail:
+  path: /streak/{id}
+  controller: App\Controller\StreakController::detail

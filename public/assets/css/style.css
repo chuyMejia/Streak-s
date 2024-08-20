@@ -323,3 +323,25 @@ table td{
     left: 10%;
   }
 
+/* 
+estilos de grid layout reponsive
+*/
+
+.layout {
+  width: 1366px;
+  height: 768px;
+ 
+
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.layout div{
+  max-height: 25%;
+  background: red;
+}
+
+
+
+

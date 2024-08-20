@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}TaskController!{% endblock %}
+
+{% block body %}
+
+
+<div class="example-wrapper">
+    <h2>{{ streak.title }}</h2> 
+  
+
+
+        <p class="data-task">
+            {{ streak.user.name }} {{ streak.user.surname }} | {{ streak.createAt|date('d/m/y h:m') }} | {{ streak.priority }} | {{ streak.hours }}h
+        </p>
+
+
+    <p>
+        {{ streak.content }}
+    </p>
+
+   
+</div>
+{% endblock %}
