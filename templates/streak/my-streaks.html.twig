@@ -8,28 +8,79 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper">
-    {# <h1>My Streaks✅</h1> #}
-    {# {{ dump(streaks) }} #}
-<section class="layout">
+
+<div class="cards">
+
 
 
 {% for streak in streaks  %}
-<div>
-{# <h2>{{streak.id}}</h2> #}
-<h3>{{streak.title}}</h3>
-<h4>{{ streak.category.title }}</h4>
-<p>{{streak.content}}</p>
-{# 
-{{ dump(streak.category.title) }} #}
 
+
+{# <div>
+{{ dump(streak) }}
+
+<abbr title="HyperText Markup Language" class="initialism">{{streak.title}}</abbr>
+<small class="text-muted">{{ streak.category.title }}</small>
+<p>{{streak.content}}</p>
+<a href="{{ path('do_streak', {'id': streak.id}) }}">
+<button type="button" class="btn btn-primary position-relative">
+
+  Mark as Done
+  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+    {{streak.repeatStreak}}
+    <span class="visually-hidden">unread messages</span>
+  </span>
+</button>
+</a>
+<p>Your Streak start in :</p>
+<p>{{ streak.createAt|date('d/m/Y') }}</p>
+<a href="{{ path('streak_detail', {'id': streak.id}) }}">check detail</a>
+</div> #}
+
+
+
+
+{# <div class="card text-white bg-success mb-3" style="max-width: 18rem;">
+  <div class="card-header">{{streak.title}}</div>
+  <div class="card-body">
+    <h5 class="card-title">{{ streak.category.title }}</h5>
+    <p class="card-text">{{streak.content}}</p>
+  </div>
+</div> #}
+
+
+
+
+
+<div class="card">
+  <h5 class="card-header">{{streak.title}}</h5>
+  <div class="card-body">
+    <h5 class="card-title">{{ streak.category.title }}</h5>
+    <p class="card-text">{{streak.content}}</p>
+    {% if (day_year == (streak.last_modified|day_of_year + 1)) or (day_year == streak.last_modified|day_of_year) %}
+    <a href="{{ path('do_streak', {'id': streak.id}) }}" class="btn btn-primary">Check as Done
+     <span class="badge bg-danger">{{streak.repeatStreak}}</span>
+    </a>
+    {% else %}
+    <p style = "color:red;font-size: 12px;">Streak is down </p>
+  
+    <p>biggest streak: <span class="badge bg-dark">{{streak.repeatStreak}}</span></p>
+    <p>your streak expired</p>
+    <strong>{{streak.last_modified|date('d/m/Y H:m') }}</strong>
+    {% endif %}  
+    {# <p>hoy php : {{today}} -> {{day_year}} </p>
+    <p>mysql : {{ streak.last_modified|day_of_year  }} </p>
+    <p>mysql : {{streak.last_modified|date('d/m/Y H:m') }}</p>
+     #}
+  </div>
 </div>
+
+
+
 {% endfor %}
   
   
-</section>
-
-
- 
 </div>
+
+
 {% endblock %}

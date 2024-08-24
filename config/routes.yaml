@@ -30,3 +30,7 @@ streak_creation:
 streak_detail:
   path: /streak/{id}
   controller: App\Controller\StreakController::detail
+
+do_streak:
+  path: /do-streak/{id}
+  controller: App\Controller\StreakController::do

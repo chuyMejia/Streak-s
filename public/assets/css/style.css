@@ -327,7 +327,7 @@ table td{
 estilos de grid layout reponsive
 */
 
-.layout {
+/* .layout {
   width: 1366px;
   height: 768px;
  
@@ -335,12 +335,52 @@ estilos de grid layout reponsive
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+} */
+
+/* .layout div{
+
+
+   max-height: 25%;
+   background-color: #FBAB7E;
+  background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);  
+
+
+
+  border-radius: 0.3rem;
+  border: 2px solid #525252;
+  color: white;
+  -webkit-box-shadow: 10px 10px 0px -7px rgba(31,31,31,1);
+  -moz-box-shadow: 10px 10px 0px -7px rgba(31,31,31,1);
+  box-shadow: 10px 10px 0px -7px rgba(31,31,31,1);
+} */
+
+
+
+/* 
+html { font-size: 22px; }
+body { padding: 1rem; }
+
+.card {
+  background-color: dodgerblue;
+  color: white;
+  padding: 1rem;
+ 
 }
 
-.layout div{
-  max-height: 25%;
-  background: red;
+.cards {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-gap: 1rem;
 }
+
+@media (min-width: 600px) {
+  .cards { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 900px) {
+  .cards { grid-template-columns: repeat(3, 1fr); }
+} */
 
 
 

@@ -11,6 +11,8 @@ use App\Entity\Streak;
 use App\Entity\User;
 use App\Entity\Category;
 
+use Doctrine\ORM\EntityManagerInterface; 
+
 use Symfony\Component\Security\Core\User\UserInterface;
 
 
@@ -122,13 +124,19 @@ class StreakController extends AbstractController
 
     public function myStreaks(UserInterface $user){
 
+        $hoy = date("d/m/Y H:m");
+        $currentDate = date('Y-m-d');
+        // Obtiene el número del día del año para la fecha actual
+        $dayOfYear = date('z', strtotime($currentDate)) + 1;
 
 
         $streaks =  $user->getStreaks();
         //var_dump($streaks);
       //die();
         return $this->render('streak/my-streaks.html.twig',[
-         'streaks' =>  $streaks
+         'streaks' =>  $streaks,
+         'today' => $hoy,
+         'day_year' => $dayOfYear
         ]);
  
      }
@@ -163,7 +171,7 @@ public function creation(Request $request, \Symfony\Component\Security\Core\User
         $em->flush();
 
         return $this->redirect(
-            //crea url para ir al detalle 
+            //crea url para ir al detalle   index
             $this->generateUrl('streak_detail',['id'=> $streak->getId()])
         );
 
@@ -201,8 +209,29 @@ public function detail($id){
 
 }
 
+public function do(int $id, EntityManagerInterface $entityManager): Response
+{
+    // Encuentra el streak por ID
+    $streak = $entityManager->getRepository(Streak::class)->find($id);
 
+    if (!$streak) {
+        throw $this->createNotFoundException('No streak found for id ' . $id);
+    }
 
+    // Aumenta el campo repeat_streak
+    $currentStreak = $streak->getRepeatStreak();
+    $streak->setLast_modified(new \DateTime('now'));
+    $streak->setRepeatStreak($currentStreak + 1);
+
+    // Guarda los cambios
+    $entityManager->persist($streak);
+    $entityManager->flush();
+
+    return $this->redirect(
+        //crea url para ir al detalle   index
+        $this->generateUrl('index')
+    );
+}
 
 
 

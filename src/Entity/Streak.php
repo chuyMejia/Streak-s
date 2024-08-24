@@ -56,6 +56,14 @@ class Streak
      */
     private $createAt;
 
+
+      /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(name="last_modified", type="datetime", nullable=true)
+     */
+    private $last_modified;
+
     /**
      * @var string|null
      *
@@ -148,12 +156,26 @@ class Streak
         return $this->createAt;
     }
 
+
+
     public function setCreateAt(?\DateTimeInterface $createAt): self
     {
         $this->createAt = $createAt;
 
         return $this;
     }
+
+    public function getLast_modified(): ?\DateTimeInterface
+    {
+        return $this->last_modified;
+    }
+    
+    public function setLast_modified(?\DateTimeInterface $last_modified): self
+    {
+        $this->last_modified = $last_modified;
+        return $this;
+    }
+    
 
     public function getImagen(): ?string
     {
