@@ -98,6 +98,28 @@ class Streak
      */
     private $user;
 
+
+
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $do = false; // Valor por defecto
+
+    // Métodos getter y setter
+
+    public function getDo(): ?bool
+    {
+        return $this->do;
+    }
+
+    public function setDo(bool $do): self
+    {
+        $this->do = $do;
+
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

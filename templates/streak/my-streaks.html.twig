@@ -12,6 +12,19 @@
 <div class="cards">
 
 
+{% if streaks is empty %}
+
+
+
+<div class="alert alert-warning" style = "display:block;text-align: center;" role="alert">
+  <p>You dont have any streak yet</p>
+  <p><a href="{{ path('streak_creation') }}">Go to create my First Streak</a></p>
+</div>
+
+
+
+{% endif %}
+
 
 {% for streak in streaks  %}
 
@@ -50,30 +63,42 @@
 
 
 
-
-
 <div class="card">
-  <h5 class="card-header">{{streak.title}}</h5>
+  <h2 class="card-header">{{ streak.title| upper }} - <st style="color:#3d9bb7;">{{  streak.category.title  }} </st></h2>
   <div class="card-body">
-    <h5 class="card-title">{{ streak.category.title }}</h5>
-    <p class="card-text">{{streak.content}}</p>
-    {% if (day_year == (streak.last_modified|day_of_year + 1)) or (day_year == streak.last_modified|day_of_year) %}
-    <a href="{{ path('do_streak', {'id': streak.id}) }}" class="btn btn-primary">Check as Done
-     <span class="badge bg-danger">{{streak.repeatStreak}}</span>
-    </a>
-    {% else %}
-    <p style = "color:red;font-size: 12px;">Streak is down </p>
+
+
   
-    <p>biggest streak: <span class="badge bg-dark">{{streak.repeatStreak}}</span></p>
-    <p>your streak expired</p>
-    <strong>{{streak.last_modified|date('d/m/Y H:m') }}</strong>
-    {% endif %}  
-    {# <p>hoy php : {{today}} -> {{day_year}} </p>
-    <p>mysql : {{ streak.last_modified|day_of_year  }} </p>
-    <p>mysql : {{streak.last_modified|date('d/m/Y H:m') }}</p>
-     #}
+    {# <h5 class="card-title">{{ streak.category.title }}</h5> #}
+    {# <p class="card-text">{{ streak.content }}</p> #}
+
+    {% if not streak.do %} 
+      {# La racha no está marcada como hecha #}
+      {% set streakDayOfYear = streak.last_modified|date('z') + 1 %}
+      {% if (day_year == streakDayOfYear+1) or (day_year == streak.last_modified|date('z') + 1) %}
+        {{ streak.do ? 'Done' : 'Not Done' }}
+        </br>
+        <a href="{{ path('do_streak', {'id': streak.id,'redirect':0}) }}" class="btn btn-primary">
+          Check as Done 
+          <span class="badge bg-danger">{{ streak.repeatStreak }}</span>
+        </a>
+        </br>
+      {% else %}
+        <p style="color:red;font-size: 14px;"><span class="badge rounded-pill bg-danger">Streak is Down.</span> </p>
+        <p>Biggest streak:  <span class="badge bg-dark">{{ streak.repeatStreak }}</span></p>
+        <p>Your streak expired : <strong>{{ streak.last_modified|date('d/m/Y H:i') }}</strong></p>
+        
+      {% endif %}
+    {% else %}
+      <p>The streak is marked as done</p>
+      <P>Please Come Back Tomorrow</P>
+      <h2>Day streak: <span class="badge bg-success">{{streak.repeatStreak}}</span></h2>
+    {% endif %}
+    
+    <a class="a_" href="{{ path('streak_detail', {'id': streak.id}) }}"><strong>Go to Detail</strong></a>
   </div>
 </div>
+
 
 
 

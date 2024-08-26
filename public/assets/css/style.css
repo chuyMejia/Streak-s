@@ -385,3 +385,15 @@ body { padding: 1rem; }
 
 
 
+.a_{
+  color:rgb(68, 68, 68);
+  text-decoration: none;
+}
+
+
+.conteiner{
+    display: flex;
+    justify-content: center;
+    margin-top: 4%;
+    min-width: 90%;
+}

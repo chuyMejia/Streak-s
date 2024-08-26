@@ -19,7 +19,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class StreakController extends AbstractController
 {
 
-   
+    private $entityManager;
+
+    // Constructor para inyectar EntityManagerInterface
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
 
 
    
@@ -122,25 +128,61 @@ class StreakController extends AbstractController
     }
 
 
-    public function myStreaks(UserInterface $user){
+    // public function myStreaks(UserInterface $user){
 
-        $hoy = date("d/m/Y H:m");
-        $currentDate = date('Y-m-d');
-        // Obtiene el número del día del año para la fecha actual
-        $dayOfYear = date('z', strtotime($currentDate)) + 1;
+    //     $hoy = date("d/m/Y H:m");
+    //     $currentDate = date('Y-m-d');
+    //     // Obtiene el número del día del año para la fecha actual
+    //     $dayOfYear = date('z', strtotime($currentDate)) + 1;
 
 
-        $streaks =  $user->getStreaks();
-        //var_dump($streaks);
-      //die();
-        return $this->render('streak/my-streaks.html.twig',[
-         'streaks' =>  $streaks,
-         'today' => $hoy,
-         'day_year' => $dayOfYear
-        ]);
+    //     $streaks =  $user->getStreaks();
+    //     //var_dump($streaks);
+    //   //die();
+    //     return $this->render('streak/my-streaks.html.twig',[
+    //      'streaks' =>  $streaks,
+    //      'today' => $hoy,
+    //      'day_year' => $dayOfYear
+    //     ]);
  
-     }
+    //  }
 
+
+    public function myStreaks(): Response
+    {
+        $user = $this->getUser(); // Obtiene el usuario actualmente autenticado
+
+        if (!$user instanceof UserInterface) {
+            throw $this->createAccessDeniedException('Necesitas estar logueado para acceder a esta página.');
+        }
+
+        // Obtiene la fecha de hoy
+        $today = new \DateTime('now');
+        $todayString = $today->format('Y-m-d'); // Formato para comparación
+
+        // Ejecuta la actualización masiva en la base de datos
+        $connection = $this->entityManager->getConnection();
+        $sql = '
+            UPDATE streaks
+            SET `do` = :do
+            WHERE DATE(last_modified) != :today
+        ';
+        $stmt = $connection->prepare($sql);
+        $stmt->execute([
+            'do' => false,
+            'today' => $todayString
+        ]);
+
+        // Obtener los streaks actualizados para el usuario
+        $streaks = $user->getStreaks();
+
+        // Renderizar la vista con los streaks
+        return $this->render('streak/my-streaks.html.twig', [
+            'streaks' => $streaks,
+            'today' => $today->format('d/m/Y H:i'),
+            'day_year' => $today->format('z') + 1
+        ]);
+    }
 
 
 //action to create a new register
@@ -164,6 +206,11 @@ public function creation(Request $request, \Symfony\Component\Security\Core\User
         $streak->setUser($user);
         $streak->setRepeatStreak(0);
         $streak->setImagen('Default_app');
+        $streak->setLast_modified(new \DateTime('now'));
+
+
+        
+        
 
         
         $em = $this->getDoctrine()->getManager();
@@ -172,7 +219,8 @@ public function creation(Request $request, \Symfony\Component\Security\Core\User
 
         return $this->redirect(
             //crea url para ir al detalle   index
-            $this->generateUrl('streak_detail',['id'=> $streak->getId()])
+            //$this->generateUrl('streak_detail',['id'=> $streak->getId()]) 
+            $this->generateUrl('index')
         );
 
     }
@@ -196,7 +244,9 @@ public function detail($id){
     //cosulta
     $streak = $streak_repo->find($id);
 
-    //cpmprapbar result
+    //cpmprapbar result aqui chuy 
+
+    $today = new \DateTime('now');
 
     if (!$streak) {
         throw $this->createNotFoundException('Streak not found');
@@ -204,13 +254,16 @@ public function detail($id){
 
 
     return $this->render('streak/detail.html.twig', [
-        'streak' => $streak
+        'streak' => $streak,
+        'day_year' => $today->format('z') + 1
     ]);
 
 }
 
-public function do(int $id, EntityManagerInterface $entityManager): Response
+public function do(int $id, ?int $redirect = null, EntityManagerInterface $entityManager): Response
 {
+   
+
     // Encuentra el streak por ID
     $streak = $entityManager->getRepository(Streak::class)->find($id);
 
@@ -222,15 +275,29 @@ public function do(int $id, EntityManagerInterface $entityManager): Response
     $currentStreak = $streak->getRepeatStreak();
     $streak->setLast_modified(new \DateTime('now'));
     $streak->setRepeatStreak($currentStreak + 1);
+    $streak->setDo(true);
 
     // Guarda los cambios
     $entityManager->persist($streak);
     $entityManager->flush();
 
+    if($redirect == 1 ){
+
+        return $this->redirect(
+            //crea url para ir al detalle   index
+
+            
+            $this->generateUrl('streak_detail', ['id' => $id])
+        );
+
+    }else{
+        
     return $this->redirect(
         //crea url para ir al detalle   index
         $this->generateUrl('index')
     );
+        
+    }
 }
 
 

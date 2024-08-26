@@ -62,6 +62,17 @@ INSERT INTO categories VALUES(NULL,'FINANCE','F','generic');
 INSERT INTO categories VALUES(NULL,'HELTH','H','generic');
 
 
+-----ultimas modificaciones
+
+
+ALTER TABLE streaks
+ADD COLUMN last_modified DATE;
+
+
+
+ALTER TABLE streaks
+ADD COLUMN `do` TINYINT(1) DEFAULT 0;
+
 
 
 

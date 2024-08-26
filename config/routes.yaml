@@ -32,5 +32,5 @@ streak_detail:
   controller: App\Controller\StreakController::detail
 
 do_streak:
-  path: /do-streak/{id}
+  path: /do-streak/{id}/{redirect}
   controller: App\Controller\StreakController::do
